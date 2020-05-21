@@ -1,0 +1,33 @@
+<html>
+
+<head>
+  <title>Test Mock API</title>
+  <script>
+    function initMe() {
+      document.getElementById("btn-tst").style.visibility="visible";
+      document.getElementById("showData").innerHTML = "";
+    }
+
+    function TestMock() {
+      var data = "";
+      var url = "https://0g9rznbd32.execute-api.ap-southeast-2.amazonaws.com/dev";
+
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+          console.log(this.responseText);
+        }
+      });
+
+      xhr.open("GET", url);
+      xhr.send(data);
+    }
+  </script>
+</head>
+
+<body onload="initMe()">
+  <input id="btn-tst" type="button" onclick="TestMock()" value="Test Mock API" />
+  <p id="showData"></p>
+</body>
+
+</html>

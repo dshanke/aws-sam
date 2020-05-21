@@ -1,0 +1,48 @@
+openapi: "3.0.1"
+info:
+  title: "env-booking-api"
+  version: "v1.0"
+paths:
+  /:
+    get:
+      summary: Get all env
+      description: Returns list of Environments
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Env"
+        500:
+          description: "500 response"
+          content: {}
+    post:
+      summary: Add Env
+      description: Adds new env
+      responses:
+        201:
+          description: "201 response"
+          content: {}
+        200:
+          description: "200 response"
+          content: {}
+        400:
+          description: "400 response"
+          content: {}
+        500:
+          description: "500 response"
+          content: {}
+components:
+  schemas:
+    EnvData:
+      type: object
+      properties:
+        env_id:
+          type: string
+        subenv_id:
+          type: string
+        owner:
+          type: string

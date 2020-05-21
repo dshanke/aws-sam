@@ -1,0 +1,90 @@
+<html>
+
+<head>
+  <title>Environment Booking Portal</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    var urlAPI = "https://higq1jnor7.execute-api.ap-southeast-2.amazonaws.com/dev";
+    
+    function initMe() {
+      document.getElementById("env_form").style.display="none";
+      document.getElementById("btn-get").style.visibility="visible";
+      document.getElementById("btn-add").style.visibility = "visible";
+      document.getElementById("showData").innerHTML = "";
+    }
+
+    function json2table(jsonText) {
+      //hide form
+      document.getElementById("env_form").style.display="none";
+      //initialize tabledata
+      var tableBody = '<table width="100%" cellpadding="3" align="center" style="font-size:12px;border-collapse:collapse;" border="1"><tr style="font-weight:bold;background:#16A1E7;"><td style="color:white;">Envid</td><td style="color:white;">SubEnvID</td><td style="color:white;">Owner</td></tr>';
+      var jsonObj = JSON.parse(jsonText);
+      jsonObj.forEach(function (d) {
+        tableBody += '<tr><td>' + d.env_id + '</td><td>' + d.subenv_id + '</td><td>' + d.owner + '</td></tr>';
+      });
+      tableBody += '<table>';
+      document.getElementById("showData").innerHTML = tableBody;
+    }
+
+    function ShowAddEnvForm() {
+      document.getElementById("showData").innerHTML = "";
+      document.getElementById("env_form").style.display="block";
+      document.getElementById("btn-submit").style.visibility = "visible";
+    }
+
+    function GetFormData() {
+      var formData =$("form").serializeArray();
+      initMe();
+      var jsonText = "{";
+      $.each(formData, function(i, field){
+        jsonText += " \"" + field.name + "\"" + ": " + "\"" + field.value + "\",";
+      });
+      jsonText = jsonText.slice(0, -1);
+      jsonText += "}";
+      console.log(jsonText);
+      return jsonText;
+    }
+
+    function GetEnv() {
+      var url = "https://higq1jnor7.execute-api.ap-southeast-2.amazonaws.com/dev";
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+          console.log(this.responseText);
+          json2table(this.responseText);
+        }
+      });
+      xhr.open("GET", url);
+      xhr.send();
+    }
+
+    function AddEnv() {
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+          alert("Submitted Successfully");
+          //after adding show all envs
+          GetEnv();
+        }
+      });
+      xhr.open("POST", urlAPI);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(GetFormData());
+    }
+  </script>
+</head>
+
+<body onload="initMe()">
+  <input id="btn-get" type="button" onclick="GetEnv()" value="Get All Env" />
+  <input id="btn-add" type="button" onclick="ShowAddEnvForm()" value="Add an Environment" />
+
+  <p id="showData"></p>
+
+  <form id="env_form" action="">
+    <input type="text" name="env_id" placeholder="Enter The Env ID">
+    <input type="text" name="subenv_id" placeholder="Enter The SubEnv ID">
+    <input type="text" name="owner" placeholder="Enter Requestor">
+  <form>
+  <input id="btn-submit" type="button" onclick="AddEnv()" value="Submit" />
+</body>
+</html>

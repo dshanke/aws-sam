@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Implementing REST API for env booking
+
+Globals:
+  Function:
+    Runtime: nodejs12.x
+    Timeout: 60
+  Api:
+    # Allows an application running locally on port 8080 to call this API
+    Cors:
+      AllowMethods: "'OPTIONS,POST,GET'"
+      AllowHeaders: "'Content-Type'"
+      AllowOrigin: "'*'"
+
+Resources:
+
+  EnvBookingApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: env-booking-api
+      StageName: dev
+      EndpointConfiguration: REGIONAL
+      DefinitionBody:
+          Fn::Transform:
+            Name: AWS::Include
+            Parameters:
+              Location: swagger-integrated.yaml
+
+  GetAllEnvFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: env-booking-getAllEnv
+      CodeUri: src/
+      Handler: index.getAllEnv
+      Policies:
+        DynamoDBReadPolicy:
+          TableName:
+            Ref: EnvTable
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: EnvTable
+      Events:
+        Get:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: EnvBookingApi
+            Path: /
+            Method: GET
+
+  AddEnvFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: env-booking-addEnv
+      CodeUri: src/
+      Handler: index.addEnv
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName:
+            Ref: EnvTable
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: EnvTable
+      Events:
+        Post:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: EnvBookingApi
+            Path: /
+            Method: POST
+
+  EnvTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: env-booking
+      PrimaryKey:
+        Name: env_id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

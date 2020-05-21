@@ -1,0 +1,68 @@
+openapi: "3.0.1"
+info:
+  title: "env-booking-api"
+  version: "v1.0"
+paths:
+  /:
+    get:
+      summary: Get all env
+      description: Returns list of env
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Env"
+        500:
+          description: "500 response"
+          content: {}
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetAllEnvFunction.Arn}/invocations
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+    post:
+      summary: Add Env
+      description: Adds new env
+      responses:
+        201:
+          description: "201 response"
+          content: {}
+        400:
+          description: "400 response"
+          content: {}
+        500:
+          description: "500 response"
+          content: {}
+        200:
+          description: "201 response"
+          content: {}
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AddEnvFunction.Arn}/invocations
+        responses:
+          default:
+            statusCode: "201"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+components:
+  schemas:
+    EnvData:
+      type: object
+      properties:
+        env_id:
+          type: string
+        subenv_id:
+          type: string
+        owner:
+          type: string
