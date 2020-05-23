@@ -1,10 +1,20 @@
 <html>
 
 <head>
-  <title>Environment Booking Portal</title>
+  <title>Let's Learn To Build APIs - says damz</title>
+  <style>
+    body {background-color: #fffec2;}
+    .container1 {
+      width: 100%;
+      margin: 0 auto;
+      padding: 1px;
+      background: #e07655;
+    }
+  </style>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
-    var urlAPI = "https://higq1jnor7.execute-api.ap-southeast-2.amazonaws.com/dev";
+    var urlAPI = "https://qqgfbujkd6.execute-api.ap-southeast-2.amazonaws.com/dev";
     
     function initMe() {
       document.getElementById("env_form").style.display="none";
@@ -46,7 +56,6 @@
     }
 
     function GetEnv() {
-      var url = "https://higq1jnor7.execute-api.ap-southeast-2.amazonaws.com/dev";
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("readystatechange", function() {
         if(this.readyState === 4) {
@@ -54,7 +63,7 @@
           json2table(this.responseText);
         }
       });
-      xhr.open("GET", url);
+      xhr.open("GET", urlAPI);
       xhr.send();
     }
 
@@ -75,6 +84,15 @@
 </head>
 
 <body onload="initMe()">
+  <div class="container1">
+    <h1 id="header"> Let's Learn To Build APIs - says damz
+      <img src="img/mask.png" alt="" style="width:70px" align="right" />
+    </h1>
+  </div>
+
+
+
+
   <input id="btn-get" type="button" onclick="GetEnv()" value="Get All Env" />
   <input id="btn-add" type="button" onclick="ShowAddEnvForm()" value="Add an Environment" />
 

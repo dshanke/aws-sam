@@ -1,7 +1,6 @@
 'use strict';
 
 const aws = require('aws-sdk');
-const uuid = require('uuid/v4');
 
 const EnvBookingTableName = process.env.TABLE_NAME;
 

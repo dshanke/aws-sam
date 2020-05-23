@@ -25,13 +25,13 @@ Resources:
           Fn::Transform:
             Name: AWS::Include
             Parameters:
-              Location: swagger-integrated.yaml
+              Location: ../swagger/swagger-integrated.yaml
 
   GetAllEnvFunction:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: env-booking-getAllEnv
-      CodeUri: src/
+      CodeUri: ../api-src/
       Handler: index.getAllEnv
       Policies:
         DynamoDBReadPolicy:
@@ -54,7 +54,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: env-booking-addEnv
-      CodeUri: src/
+      CodeUri: ../api-src/
       Handler: index.addEnv
       Policies:
         DynamoDBCrudPolicy:
@@ -74,12 +74,30 @@ Resources:
             Method: POST
 
   EnvTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      TableName: env-booking
-      PrimaryKey:
-        Name: env_id
-        Type: String
-      ProvisionedThroughput:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: env_id
+          AttributeType: S
+        - AttributeName: subenv_id
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: env_id
+          KeyType: HASH
+        - AttributeName: subenv_id
+          KeyType: RANGE
+      ProvisionedThroughput: 
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+
+Outputs:
+  WebsiteURL:
+    Description: URL for website hosted on S3
+    Value: !GetAtt 
+      - S3Bucket
+      - WebsiteURL
+
+Outputs:
+  DevEndpoint:
+    Description: "API Dev stage endpoint"
+    Value: !Sub "https://${EnvBookingApi}.execute-api.${AWS::Region}.amazonaws.com/dev"
