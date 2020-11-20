@@ -1,21 +1,26 @@
 # aws-sam
 
+```
 Folder Structure:
-env-booking-api
+env-booking-api:
+|--> api-src      (Contains Lambda Function Source)
+|--> docs         (Contains the PPT)
+|--> frontend     (Contains the Frontend HTML/Javascript file )
+|--> swagger      (Contains the swagger files - API Definition Files  )
+|--> template     (Contains SAM Templates - Serverless Resources as Code  )
 
-| --> api-src      (Contains Lambda Function Source)                         |
-| --> docs         (Contains the PPT)                                        |
-| --> frontend     (Contains the Frontend HTML/Javascript file )             |
-| --> swagger      (Contains the swagger files - API Definition Files  )     |
-| --> template     (Contains SAM Templates - Serverless Resources as Code  ) |
+You can follow the steps below to provision the application (api,lambda,static website).
+Best done on via aws cloud9
+```
 
+```bash
 #PS1='bash $'
 
 cd aws-sam/env-booking-api
 
 mkdir -p build
 
-##api gateway
+#api gateway
 sam_template_name=sam-template-env-booking-api
 s3_bucket=damz-demo-sam
 
@@ -43,3 +48,5 @@ sam package --template-file template/${sam_template_name}.yaml --output-template
 sam deploy --template-file build/${sam_template_name}-out.yaml --stack-name ${sam_template_name}-stack --capabilities CAPABILITY_IAM --region ap-southeast-2
 
 aws s3 cp frontend s3://damz-env-booking --recursive --region ap-southeast-2
+```
+
