@@ -2,11 +2,11 @@
 
 Folder Structure:
 env-booking-api
- | --> api-src      (Contains Lambda Function Source)
- | --> docs         (Contains the PPT)
- | --> frontend     (Contains the Frontend HTML/Javascript file )
- | --> swagger      (Contains the swagger files - API Definition Files  )
- | --> template     (Contains SAM Templates - Serverless Resources as Code  )
+ | --> api-src      (Contains Lambda Function Source) |
+ | --> docs         (Contains the PPT) |
+ | --> frontend     (Contains the Frontend HTML/Javascript file ) |
+ | --> swagger      (Contains the swagger files - API Definition Files  ) |
+ | --> template     (Contains SAM Templates - Serverless Resources as Code  ) |
 
 #PS1='bash $'
 
